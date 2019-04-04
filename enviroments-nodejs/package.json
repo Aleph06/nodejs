@@ -1,0 +1,17 @@
+{
+  "name": "enviroments-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run": "node -r dotenv/config ./server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "dotenv": "^7.0.0"
+  }
+}

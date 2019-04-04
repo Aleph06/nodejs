@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "ts-node-starter"
+		},
+		{
+			"path": "nodejs-express-typescript"
+		},
+		{
+			"path": "enviroments-nodejs"
+		}
+	],
+	"settings": {
+		"npm.enableScriptExplorer": true
+	}
+}
