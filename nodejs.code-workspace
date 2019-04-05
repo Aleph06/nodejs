@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "enviroments-nodejs"
+		},
+		{
+			"path": "ts-node-express"
 		}
 	],
 	"settings": {
