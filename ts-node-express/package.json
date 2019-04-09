@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node -r dotenv/config ./src/server.ts",
-    "prod": "tsc && set MONGO_PATH =localhost/tutorial && set PORT =5000 && node ./dist/server.js"
+    "prod": "tsc && MONGO_PATH=localhost/tutorial PORT=5000 MONGO_PASSWORD= MONGO_USER= node ./dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +13,12 @@
   "dependencies": {
     "@types/mongoose": "^5.3.24",
     "body-parser": "^1.18.3",
+    "class-transformer": "^0.2.0",
+    "class-validator": "^0.9.1",
     "envalid": "^4.2.2",
     "express": "^4.16.4",
     "mongoose": "^5.4.22",
+    "rxjs": "^6.4.0",
     "ts-node": "^8.0.3",
     "typescript": "^3.4.1"
   },

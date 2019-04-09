@@ -3,6 +3,10 @@ import Post from './post';
 import RouteController from '../common/route.controller';
 
 import postModel from './posts.model';
+import HttpException from '../exceptions/http-exception';
+import PostNotFoundException from '../exceptions/post-not-found-exception';
+import validationMiddleware from '../middleware/validation.middleware';
+import CreatePostDto from './post.dto';
 
 class PostsController extends RouteController {
 
@@ -16,9 +20,9 @@ class PostsController extends RouteController {
     public intializeRoutes() {
         this.router.get(this.path, this.getAllPosts);
         this.router.get(`${this.path}/:id`, this.getPostById);
-        this.router.put(`${this.path}/:id`, this.modifyPost);
+        this.router.put(`${this.path}/:id`, validationMiddleware(CreatePostDto, true), this.modifyPost);
         this.router.delete(`${this.path}/:id`, this.deletePost);
-        this.router.post(this.path, this.createPost);
+        this.router.post(this.path, validationMiddleware(CreatePostDto), this.createPost);
     }
 
     private getAllPosts = (request: express.Request, response: express.Response) => {
@@ -28,21 +32,29 @@ class PostsController extends RouteController {
             });
     }
 
-    private getPostById = (request: express.Request, response: express.Response) => {
+    private getPostById = (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
         this.post.findById(id)
             .then((post) => {
-                response.send(post);
+                if (post) {
+                    response.send(post);
+                } else {
+                    next(new PostNotFoundException(id));
+                }
             });
     }
 
-    private modifyPost = (request: express.Request, response: express.Response) => {
+    private modifyPost = (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
         console.log('update: ' + id);
         const postData: Post = request.body;
         this.post.findOneAndUpdate({ _id: id }, postData, { new: true })
             .then((post) => {
-                response.send(post);
+                if (post) {
+                    response.send(post);
+                } else {
+                    next(new PostNotFoundException(id));
+                }
             });
     }
 
@@ -55,7 +67,7 @@ class PostsController extends RouteController {
             });
     }
 
-    private deletePost = (request: express.Request, response: express.Response) => {
+    private deletePost = (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
         console.log('delete: ' + id);
         this.post.findOneAndDelete({ _id: id })
@@ -63,7 +75,7 @@ class PostsController extends RouteController {
                 if (successResponse) {
                     response.sendStatus(200);
                 } else {
-                    response.sendStatus(404);
+                    next(new PostNotFoundException(id));
                 }
             });
     }
